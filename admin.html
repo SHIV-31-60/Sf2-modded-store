@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+    
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Admin Panel</h1>
+                <p>SF2 Mod Store Management</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" id="loginEmail" required placeholder="admin@sf2modstore.com">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                <div id="loginError" class="error-message" style="display: none;"></div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <div class="login-footer">
+                <a href="index.html">
+                    <i class="fas fa-arrow-left"></i> Back to Store
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-fist-raised"></i>
+                <span>SF2 Admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#" class="nav-item" data-section="add-item">
+                    <i class="fas fa-plus-circle"></i> Add New Item
+                </a>
+                <a href="#" class="nav-item" data-section="manage-items">
+                    <i class="fas fa-list"></i> Manage Items
+                </a>
+                <a href="#" class="nav-item" data-section="categories">
+                    <i class="fas fa-tags"></i> Categories
+                </a>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-store"></i> View Store
+                </a>
+                <a href="#" class="nav-item logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="admin-header-content">
+                    <h1 id="sectionTitle">Dashboard</h1>
+                    <div class="admin-user">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="adminEmail">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="admin-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalItemsCount">0</h3>
+                            <p>Total Items</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>1,234</h3>
+                            <p>Total Downloads</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="categoriesCount">6</h3>
+                            <p>Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="storageUsed">0 MB</h3>
+                            <p>Storage Used</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-items">
+                    <h2>Recent Uploads</h2>
+                    <div id="recentItemsList" class="recent-list">
+                        <!-- Recent items will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add Item Section -->
+            <section id="addItemSection" class="admin-section">
+                <div class="form-card">
+                    <h2>Add New Item</h2>
+                    <form id="addItemForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemTitle">Item Title *</label>
+                                <input type="text" id="itemTitle" required placeholder="e.g., Shadow Helmet Texture">
+                            </div>
+                            <div class="form-group">
+                                <label for="itemCategory">Category *</label>
+                                <select id="itemCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="texture">Texture</option>
+                                    <option value="file">File</option>
+                                    <option value="zip">ZIP Package</option>
+                                    <option value="weapon">Weapon</option>
+                                    <option value="armor">Armor</option>
+                                    <option value="character">Character</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemCharacter">Character</label>
+                                <select id="itemCharacter">
+                                    <option value="">Select Character</option>
+                                    <option value="shadow">Shadow</option>
+                                    <option value="hermit">Hermit</option>
+                                    <option value="butcher">Butcher</option>
+                                    <option value="wasp">Wasp</option>
+                                    <option value="lynx">Lynx</option>
+                                    <option value="titan">Titan</option>
+                                    <option value="shogun">Shogun</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemTags">Tags (comma separated)</label>
+                                <input type="text" id="itemTags" placeholder="e.g., texture, helmet, armor">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemDescription">Description</label>
+                            <textarea id="itemDescription" rows="4" placeholder="Describe the mod item..."></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemPreview">Preview Image * (PNG/JPG, max 2MB)</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="itemPreview" accept="image/png,image/jpeg,image/jpg" required>
+                                    <div class="file-input-display">
+                                        <i class="fas fa-image"></i>
+                                        <span>Choose preview image</span>
+                                    </div>
+                                </div>
+                                <div id="previewImagePreview" class="image-preview"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemFile">Download File * (ZIP/PNG/JPG, max 5MB)</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="itemFile" accept=".zip,.png,.jpg,.jpeg" required>
+                                    <div class="file-input-display">
+                                        <i class="fas fa-file-archive"></i>
+                                        <span>Choose file</span>
+                                    </div>
+                                </div>
+                                <div id="fileInfo" class="file-info"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="resetForm">
+                                <i class="fas fa-undo"></i> Reset
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Item
+                            </button>
+                        </div>
+
+                        <div id="uploadProgress" class="upload-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <p id="progressText">Uploading...</p>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Manage Items Section -->
+            <section id="manageItemsSection" class="admin-section">
+                <div class="section-controls">
+                    <h2>Manage Items</h2>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="manageSearch" placeholder="Search items...">
+                    </div>
+                </div>
+
+                <div id="manageItemsList" class="manage-items-list">
+                    <!-- Items list will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section id="categoriesSection" class="admin-section">
+                <h2>Manage Categories</h2>
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <i class="fas fa-image"></i>
+                        <h3>Textures</h3>
+                        <p id="textureCount">0 items</p>
+                    </div>
+                    <div class="category-card">
+                        <i class="fas fa-file"></i>
+                        <h3>Files</h3>
+                        <p id="fileCount">0 items</p>
+                    </div>
+                    <div class="category-card">
+                        <i class="fas fa-archive"></i>
+                        <h3>ZIP Packages</h3>
+                        <p id="zipCount">0 items</p>
+                    </div>
+                    <div class="category-card">
+                        <i class="fas fa-sword"></i>
+                        <h3>Weapons</h3>
+                        <p id="weaponCount">0 items</p>
+                    </div>
+                    <div class="category-card">
+                        <i class="fas fa-shield"></i>
+                        <h3>Armor</h3>
+                        <p id="armorCount">0 items</p>
+                    </div>
+                    <div class="category-card">
+                        <i class="fas fa-user"></i>
+                        <h3>Characters</h3>
+                        <p id="characterCount">0 items</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Edit Item Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="closeEditModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <h2>Edit Item</h2>
+                <form id="editItemForm" class="admin-form">
+                    <input type="hidden" id="editItemId">
+                    
+                    <div class="form-group">
+                        <label for="editTitle">Item Title</label>
+                        <input type="text" id="editTitle" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editCategory">Category</label>
+                            <select id="editCategory" required>
+                                <option value="texture">Texture</option>
+                                <option value="file">File</option>
+                                <option value="zip">ZIP Package</option>
+                                <option value="weapon">Weapon</option>
+                                <option value="armor">Armor</option>
+                                <option value="character">Character</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCharacter">Character</label>
+                            <select id="editCharacter">
+                                <option value="">Select Character</option>
+                                <option value="shadow">Shadow</option>
+                                <option value="hermit">Hermit</option>
+                                <option value="butcher">Butcher</option>
+                                <option value="wasp">Wasp</option>
+                                <option value="lynx">Lynx</option>
+                                <option value="titan">Titan</option>
+                                <option value="shogun">Shogun</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTags">Tags (comma separated)</label>
+                        <input type="text" id="editTags">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editDescription">Description</label>
+                        <textarea id="editDescription" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, limit, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+
+        // Import Firebase config
+        import { firebaseConfig } from './js/firebase-config.js';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make Firebase instances available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+        window.firebaseModules = { 
+            signInWithEmailAndPassword, 
+            onAuthStateChanged, 
+            signOut,
+            collection, 
+            addDoc, 
+            getDocs, 
+            doc, 
+            updateDoc, 
+            deleteDoc,
+            query,
+            orderBy,
+            limit,
+            where,
+            ref, 
+            uploadBytesResumable, 
+            getDownloadURL,
+            deleteObject
+        };
+    </script>
+
+    <!-- Admin Script -->
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "sf2-mod-store",
+  "version": "1.0.0",
+  "description": "Professional Shadow Fight 2 modding store with Firebase backend",
+  "main": "index.html",
+  "scripts": {
+    "serve": "firebase serve",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:rules": "firebase deploy --only firestore:rules,storage:rules",
+    "build": "echo 'No build step required - static files'",
+    "start": "firebase serve"
+  },
+  "keywords": [
+    "shadow-fight-2",
+    "modding",
+    "firebase",
+    "gaming",
+    "mod-store"
+  ],
+  "author": "SF2 Mod Store",
+  "license": "MIT",
+  "devDependencies": {
+    "firebase-tools": "^12.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,71 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.email != null;
+    }
+    
+    // Helper function to validate file size
+    function isValidFileSize(maxSizeMB) {
+      return request.resource.size < maxSizeMB * 1024 * 1024;
+    }
+    
+    // Helper function to validate image file
+    function isValidImage() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.contentType.matches('image/(png|jpeg|jpg)');
+    }
+    
+    // Helper function to validate upload files
+    function isValidUploadFile() {
+      return request.resource.contentType.matches('image/.*') ||
+             request.resource.contentType == 'application/zip' ||
+             request.resource.contentType == 'application/x-zip-compressed';
+    }
+    
+    // Preview images - Public read, Admin upload
+    match /previews/{fileName} {
+      // Anyone can read preview images
+      allow read: if true;
+      
+      // Only admins can upload
+      // Max size: 2MB
+      // Type: PNG or JPEG
+      allow create: if isAdmin() && 
+                      isValidImage() && 
+                      isValidFileSize(2);
+      
+      // Only admins can update/delete
+      allow update, delete: if isAdmin();
+    }
+    
+    // Download files - Public read, Admin upload
+    match /files/{fileName} {
+      // Anyone can read/download files
+      allow read: if true;
+      
+      // Only admins can upload
+      // Max size: 5MB
+      // Type: Images or ZIP files
+      allow create: if isAdmin() && 
+                      isValidUploadFile() && 
+                      isValidFileSize(5);
+      
+      // Only admins can update/delete
+      allow update, delete: if isAdmin();
+    }
+    
+    // Default rule: deny all access to other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
